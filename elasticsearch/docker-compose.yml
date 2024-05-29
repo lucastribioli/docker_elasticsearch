@@ -1,0 +1,35 @@
+version: '2.2'
+
+services:
+  elasticsearch:
+    #Especifica a imagem Docker do Elasticsearch que será usada
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.7.0
+    #Especifica o nome do contêiner
+    container_name: elasticsearch
+    #Váriaveis de ambiente
+    environment:
+      #Nome do nó Elasticsearch
+      - node.name=elasticsearch
+      #Configuração para um nó único, evitando a necessidade de descoberta de outros nós
+      - discovery.type=single-node
+      #Nome do cluster
+      - cluster.name=docker-cluster
+      #Impede que a memória usada pelo Elasticsearch seja trocada para o disco.
+      - bootstrap.memory_lock=true
+      #Define as opções de memória para a JVM
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    #Configura limites de memória para o contêiner.  
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    #Define volumes persistentes para armazenar dados.    
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
+    #Mapeia as portas do contêiner para as portas do host.  
+    ports:
+      - 9200:9200
+
+volumes:
+  esdata:
+    driver: local
