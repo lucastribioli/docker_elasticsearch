@@ -10,3 +10,9 @@ For access container
 ```shell
 docker exec -it elasticsearch bash
 ```
+
+For test
+```shell
+curl -X GET localhost:9200
+```
+
